@@ -1,0 +1,2 @@
+# BcUpdateSupporter
+baserCMS本体のアップデートサポート機能
