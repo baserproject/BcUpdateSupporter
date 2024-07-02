@@ -1,4 +1,16 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+/**
+ * 5.0.19 improvement config
+ */
 $pluginsServicePath = \Cake\Core\Plugin::path('BaserCore') . 'src' . DS . 'Service' . DS . 'PluginsService.php';
 if(is_writable($pluginsServicePath)) {
     $isPluginsServiceWritable = true;

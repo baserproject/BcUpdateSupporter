@@ -6,7 +6,6 @@ declare(strict_types=1);
  *
  * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
- * @since         5.0.7
  * @license       https://basercms.net/license/index.html MIT License
  */
 
@@ -14,10 +13,7 @@ namespace BcUpdateSupporter;
 
 use BaserCore\BcPlugin;
 use BcUpdateSupporter\ServiceProvider\BcUpdateSupporterServiceProvider;
-use Cake\Console\CommandCollection;
 use Cake\Core\ContainerInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
 
 /**
@@ -25,19 +21,6 @@ use Cake\Routing\RouteBuilder;
  */
 class BcUpdateSupporterPlugin extends BcPlugin
 {
-    /**
-     * Load all the plugin configuration and bootstrap logic.
-     *
-     * The host application is provided as an argument. This allows you to load
-     * additional plugin dependencies, or attach events.
-     *
-     * @param \Cake\Core\PluginApplicationInterface $app The host application
-     * @return void
-     */
-    public function bootstrap(PluginApplicationInterface $app): void
-    {
-        parent::bootstrap($app);
-    }
 
     /**
      * Add routes for the plugin.
@@ -63,34 +46,6 @@ class BcUpdateSupporterPlugin extends BcPlugin
     }
 
     /**
-     * Add middleware for the plugin.
-     *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to update.
-     * @return \Cake\Http\MiddlewareQueue
-     */
-    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
-    {
-        // Add your middlewares here
-
-        return $middlewareQueue;
-    }
-
-    /**
-     * Add commands for the plugin.
-     *
-     * @param \Cake\Console\CommandCollection $commands The command collection to update.
-     * @return \Cake\Console\CommandCollection
-     */
-    public function console(CommandCollection $commands): CommandCollection
-    {
-        // Add your commands here
-
-        $commands = parent::console($commands);
-
-        return $commands;
-    }
-
-    /**
      * Register application container services.
      *
      * @param \Cake\Core\ContainerInterface $container The Container to update.
@@ -103,4 +58,5 @@ class BcUpdateSupporterPlugin extends BcPlugin
 
         $container->addServiceProvider(new BcUpdateSupporterServiceProvider());
     }
+
 }

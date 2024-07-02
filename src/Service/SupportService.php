@@ -1,14 +1,29 @@
 <?php
-
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @license       https://basercms.net/license/index.html MIT License
+ */
 namespace BcUpdateSupporter\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\Folder;
 
+/**
+ * Class SupportService
+ */
 class SupportService implements SupportServiceInterface
 {
 
+    /**
+     * 改善情報を取得する
+     * @param string $currentVersion
+     * @return array
+     */
     public function getImprovements(string $currentVersion): array
     {
         $currentVerPoint = BcUtil::verpoint($currentVersion);
@@ -53,6 +68,11 @@ class SupportService implements SupportServiceInterface
         return $improvements;
     }
 
+    /**
+     * 改善を実行する
+     * @param string $targetVersion
+     * @return void
+     */
     public function execute(string $targetVersion): void
     {
         $path = BcUtil::getPluginPath('BcUpdateSupporter') . 'config' . DS . 'improvements' . DS . $targetVersion . DS . 'improvement.php';

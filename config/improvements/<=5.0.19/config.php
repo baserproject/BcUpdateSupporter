@@ -1,4 +1,16 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ *
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @license       https://basercms.net/license/index.html MIT License
+ */
+
+/**
+ * <= 5.0.10 improvement config
+ */
 return [
     'title' => 'v5.0.20 を指定してアップデートできない問題',
     'detail' =>
