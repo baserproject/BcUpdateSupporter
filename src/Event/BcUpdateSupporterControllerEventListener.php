@@ -70,6 +70,9 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
             if($this->isAction('Plugins.Update')) {
                 if(!$request->is('post')) {
                     $controller->BcMessage->setInfo(__d('baser_core', 'アップデートサポータープラグインにより、強制的に v5.0.20 にアップデートします。'));
+                } else {
+                	$controller->Security->setConfig('unlockedActions', ['update']);
+                	$controller->setRequest($request->withData('targetVersion', '5.0.20'));
                 }
             }
         }
