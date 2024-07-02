@@ -9,7 +9,7 @@
  */
 
 /**
- * <= 5.0.10 improvement config
+ * smaller 5.0.20 improvement config
  */
 return [
     'title' => 'v5.0.20 を指定してアップデートできない問題',
