@@ -16,5 +16,11 @@ return [
     'description' => __d('baser_core', 'baserCMSのアップデートをサポートします。'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
-    'installMessage' => ''
+    'installMessage' => '',
+    'adminLink' => [
+        'prefix' => 'Admin',
+        'plugin' => 'BcUpdateSupporter',
+        'controller' => 'Support',
+        'action' => 'index'
+    ]
 ];

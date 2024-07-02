@@ -9,6 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
+namespace BaserCore\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Plugin;
@@ -45,7 +46,7 @@ use InvalidArgumentException;
  * Class PluginsService
  * @property PluginsTable $Plugins
  */
-class PluginsService implements \BaserCore\Service\PluginsServiceInterface
+class PluginsService implements PluginsServiceInterface
 {
 
     /**
@@ -491,8 +492,8 @@ class PluginsService implements \BaserCore\Service\PluginsServiceInterface
         }
 
         // アクセスルールを削除する
-        /** @var \BaserCore\Service\PermissionGroupsService $permissionGroupsService */
-        $permissionGroupsService = $this->getService(\BaserCore\Service\PermissionGroupsServiceInterface::class);
+        /** @var PermissionGroupsService $permissionGroupsService */
+        $permissionGroupsService = $this->getService(PermissionGroupsServiceInterface::class);
         $permissionGroupsService->deleteByPlugin($plugin->name);
 
         BcUtil::clearAllCache();
@@ -556,7 +557,7 @@ class PluginsService implements \BaserCore\Service\PluginsServiceInterface
      */
     public function getMarketPlugins(): array
     {
-        $bcOfficialApiService = $this->getService(\BaserCore\Service\BcOfficialApiServiceInterface::class);
+        $bcOfficialApiService = $this->getService(BcOfficialApiServiceInterface::class);
         return $bcOfficialApiService->getRss('marketPluginRss');
     }
 

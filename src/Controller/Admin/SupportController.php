@@ -13,11 +13,15 @@ class SupportController extends BcAdminAppController
      * @param SupportAdminServiceInterface|SupportAdminService $service
      * @return void
      */
-    public function index(SupportAdminServiceInterface $service)
+    public function index(SupportAdminServiceInterface $service, $targetVersion = null)
     {
         if($this->getRequest()->is('post')) {
-            $service->execute($this->getRequest()->getParam('pass.0'));
-            $this->Flash->success(__d('baser_core', '改善完了！' . $this->getRequest()->getParam('pass.0')));
+            try {
+                $service->execute($targetVersion);
+                $this->BcMessage->setSuccess(__d('baser_core', '{0} の改善が完了しました。', $targetVersion));
+            } catch (\Exception $e) {
+                $this->BcMessage->setError($e->getMessage());
+            }
             $this->redirect(['action' => 'index']);
         }
         $this->set($service->getViewVarsForIndex(BcUtil::getVersion()));
