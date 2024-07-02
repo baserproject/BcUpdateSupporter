@@ -37,24 +37,21 @@ class SupportService implements SupportServiceInterface
         $improvementVerPoints = [];
         if (empty($files[0])) return [];
         foreach($files[0] as $folder) {
-            $improvementVersion = $folder;
-            $improvementVerPoints[$improvementVersion] = BcUtil::verpoint($improvementVersion);
+            $improvementVerPoints[$folder] = BcUtil::verpoint($folder);
         }
         asort($improvementVerPoints);
         foreach($improvementVerPoints as $key => $improvementVerPoint) {
-            if(preg_match('/^<=/', $key)) {
-                if (!($currentVerPoint <= $improvementVerPoint)) continue;
-            } elseif(preg_match('/^</', $key)) {
+            if(preg_match('/^smaller-/', $key)) {
                 if (!($currentVerPoint < $improvementVerPoint)) continue;
-            } elseif(preg_match('/^>=/', $key)) {
-                if (!($currentVerPoint >= $improvementVerPoint)) continue;
-            } elseif(preg_match('/^>/', $key)) {
+            } elseif(preg_match('/^bigger-/', $key)) {
                 if (!($currentVerPoint > $improvementVerPoint)) continue;
             } else {
                 if (!($currentVerPoint === $improvementVerPoint)) continue;
             }
             $improvementPath = $path . DS . $key . DS . 'config.php';
             if (file_exists($improvementPath)) {
+                $key = preg_replace('/^smaller-/', '<', $key);
+                $key = preg_replace('/^bigger-/', '>', $key);
                 $improvements[$key] = array_merge([
                     'title' => '',
                     'detail' => '',
