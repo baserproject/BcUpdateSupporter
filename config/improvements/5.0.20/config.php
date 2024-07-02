@@ -24,8 +24,8 @@ if(preg_match('/"cakephp\/cakephp":\s*"5\./', $content)) {
     $applied = false;
 }
 return [
-    'title' => 'baserCMS5.1系 にて CakePHP5系にアップデートが必要な問題',
-    'detail' => 'CakePHP5系にアップデート可能な composer.json を提供します。',
+    'title' => 'baserCMS5.1系へのアップデートにて CakePHP5系が必要な問題',
+    'detail' => 'baserCMS5.1系とともに、CakePHP5系にアップデート可能な composer.json を設置します。',
     'hasExecute' => true,
     'executeEnabled' => $isComposerWritable,
     'warning' => (!$isComposerWritable)? __d('baser_core', '{0} に書き込み権限を付与してください。', $composerPath) : '',

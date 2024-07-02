@@ -26,7 +26,6 @@ class SupportService implements SupportServiceInterface
      */
     public function getImprovements(string $currentVersion): array
     {
-    $currentVersion = '5.0.20';
         $currentVerPoint = BcUtil::verpoint($currentVersion);
         if ($currentVerPoint === false) return [];
 
