@@ -6,7 +6,7 @@ if(is_writable($pluginsServicePath)) {
     $isPluginsServiceWritable = false;
 }
 $content = file_get_contents($pluginsServicePath);
-if(!preg_match('/public function getCoreUpdate\(.+?\?bool \$force/', $content)) {
+if(preg_match('/public function getCoreUpdate\(.+?\?bool \$force/', $content)) {
     $applied = true;
 } else {
     $applied = false;
