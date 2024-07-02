@@ -62,6 +62,7 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
                 }
             } elseif($this->isAction('Plugins.GetCoreUpdate')) {
                 if($request->is('post')) {
+                	$controller->Security->setConfig('unlockedActions', ['get_core_update']);
                     $controller->setRequest($request->withData('targetVersion', '5.0.20'));
                 }
             }
