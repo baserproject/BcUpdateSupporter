@@ -12,7 +12,7 @@
         "ext-pdo": "*",
         "ext-sqlite3": "*",
         "ext-zip": "*",
-        "baserproject/basercms-core": "5.1.0",
+        "baserproject/baser-core": "5.1.0",
         "cakephp/authentication": "^3.0",
         "cakephp/cakephp": "5.0.*",
         "cakephp/migrations": "^4.0.0",
