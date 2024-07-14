@@ -10,6 +10,7 @@
 namespace BcUpdateSupporter\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Filesystem\Folder;
 
@@ -31,7 +32,13 @@ class SupportService implements SupportServiceInterface
 
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath('BcUpdateSupporter') . 'config' . DS . 'improvements';
-        $folder = new Folder($path);
+
+        if(BcUtil::is51()) {
+            $folder = new BcFolder($path);
+        } else {
+            $folder = new Folder($path);
+        }
+
         $files = $folder->read(true, true);
         $improvements = [];
         $improvementVerPoints = [];

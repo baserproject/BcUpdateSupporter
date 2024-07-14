@@ -23,14 +23,13 @@ use Cake\Core\ServiceProvider;
 class BcUpdateSupporterServiceProvider extends ServiceProvider
 {
 
-    /**
-     * Provides
-     * @var string[]
-     */
-    protected $provides = [
-        SupportServiceInterface::class,
-        SupportAdminServiceInterface::class,
-    ];
+    public function __construct()
+    {
+        $this->provides = [
+            SupportServiceInterface::class,
+            SupportAdminServiceInterface::class,
+        ];
+    }
 
     /**
      * Services
