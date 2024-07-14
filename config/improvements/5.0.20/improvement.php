@@ -11,8 +11,15 @@
 /**
  * 5.0.20 improvement
  */
-$targetPath = ROOT . DS . 'composer.json';
-$srcPath = __DIR__ . DS . 'composer.json';
-if(!copy($srcPath, $targetPath)) {
-    throw new \BaserCore\Error\BcException(__d('baser_core', "ファイルのコピーに失敗しました。手動で適用してください。\n{0} => {1}", $srcPath, $targetPath));
+$targetPath1 = ROOT . DS . 'composer.json';
+$srcPath1 = __DIR__ . DS . 'composer.json';
+$targetPath2 = ROOT . DS . 'composer.lock';
+$srcPath2 = __DIR__ . DS . 'composer.lock';
+if(!copy($srcPath1, $targetPath1) || !copy($srcPath2, $targetPath2)) {
+    throw new \BaserCore\Error\BcException(__d(
+    	'baser_core', 
+    	"ファイルのコピーに失敗しました。手動で適用してください。\n{0} => {1}\n{2} => {3}", 
+    	$srcPath1, 
+    	$targetPath1
+	));
 }

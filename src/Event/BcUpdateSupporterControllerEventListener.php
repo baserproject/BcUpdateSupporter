@@ -15,6 +15,7 @@ use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * BcUpdateSupporter Controller Event Listener
@@ -38,7 +39,9 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
     {
         if(BcUtil::verpoint(BcUtil::getVersion()) < BcUtil::verpoint('5.0.20')) {
             $this->forBefore_5_0_20($event);
-        }
+        } elseif(BcUtil::verpoint(BcUtil::getVersion()) >= BcUtil::verpoint('5.0.20')) {
+			$this->forAfter5_0_20($event);
+		}
     }
 
     /**
@@ -78,5 +81,37 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
             }
         }
     }
+	
+	/**
+	 * @param Event $event
+	 * @return void
+	 */
+    public function forAfter5_0_20(Event $event)
+	{
+		$controller = $event->getSubject();
+		$request = $controller->getRequest();
+		if($this->isAction('Plugins.UpdateCore')) {
+			if($request->is('post')) {
+				$pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+				$plugins = $pluginsTable->find()->where([
+					'Plugins.status' => true
+				])->all();
+				if($plugins->count()) {
+					foreach($plugins as $plugin) {
+						$plugin->status = false;
+						$pluginsTable->save($plugin);
+					}
+				}
+				Cache::delete('enable_plugins', '_bc_env_');
+			}
+		} elseif($this->isAction('Plugins.GetCoreUpdate')) {
+			if($request->is('post')) {
+				$controller->Security->setConfig('unlockedActions', ['get_core_update']);
+				$controller->setRequest($request->withData('targetVersion', '5.1.x'));
+			} else {
+				$controller->BcMessage->setInfo(__d('baser_core', "5.1系へのアップデートはプラグインが対応していないとシステム全体が動かなくなる可能性があります。\n安全にアップデートするため、アップデートサポーターが、アップデート実行時に全てのプラグインを無効化します。"));
+			}
+		}
+	}
 
 }
