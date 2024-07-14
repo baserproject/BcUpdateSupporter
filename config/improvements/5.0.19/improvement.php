@@ -11,8 +11,20 @@
 /**
  * 5.0.19 improvement
  */
-$targetPath = \Cake\Core\Plugin::path('BaserCore') . 'src' . DS . 'Service' . DS . 'PluginsService.php';
-$srcPath = __DIR__ . DS . 'src' . DS . 'Service' . DS . 'PluginsService.php';
-if(!copy($srcPath, $targetPath)) {
-    throw new \BaserCore\Error\BcException(__d('baser_core', "ファイルのコピーに失敗しました。手動で適用してください。\n{0} => {1}", $srcPath, $targetPath));
+$srcPluginsServicePath = __DIR__ . DS . 'src' . DS . 'Service' . DS . 'PluginsService.php';
+$srcPluginsAdminServicePath = __DIR__ . DS . 'src' . DS . 'Service' . DS . 'Admin' . DS . 'PluginsAdminService.php';
+$targetPluginsServicePath = \Cake\Core\Plugin::path('BaserCore') . 'src' . DS . 'Service' . DS . 'PluginsService.php';
+$targetPluginsAdminServicePath = \Cake\Core\Plugin::path('BaserCore') . 'src' . DS . 'Service' . DS . 'Admin' . DS . 'PluginsAdminService.php';
+if(!copy($srcPluginsServicePath, $targetPluginsServicePath)
+    || !copy($srcPluginsAdminServicePath, $targetPluginsAdminServicePath)
+) {
+    throw new \BaserCore\Error\BcException(__d('baser_core',
+        "ファイルのコピーに失敗しました。手動で適用してください。" .
+        "\n{0} => {1}" .
+        "\n{2} => {3}",
+        $srcPluginsServicePath,
+        $targetPluginsServicePath,
+        $srcPluginsAdminServicePath,
+        $targetPluginsAdminServicePath
+    ));
 }
