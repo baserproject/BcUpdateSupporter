@@ -58,22 +58,22 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
             // 5.0.19 の場合
             if($this->isAction('Plugins.Update')) {
                 if(!Cache::read('coreDownloaded', '_bc_update_')) {
-                    $controller->BcMessage->setInfo(__d('baser_core', 'アップデートサポータープラグインにより、強制的に v5.0.20 をダウンロードします。'));
+                    $controller->BcMessage->setInfo(__d('baser_core', 'アップデートサポータープラグインにより、強制的に v5.0系の最新版をダウンロードします。'));
                 }
             } elseif($this->isAction('Plugins.GetCoreUpdate')) {
                 if($request->is('post')) {
                 	$controller->Security->setConfig('unlockedActions', ['get_core_update']);
-                    $controller->setRequest($request->withData('targetVersion', '5.0.20'));
+                    $controller->setRequest($request->withData('targetVersion', '5.0.x'));
                 }
             }
         } else {
             // 5.0.18 以下の場合
             if($this->isAction('Plugins.Update')) {
                 if(!$request->is('post')) {
-                    $controller->BcMessage->setInfo(__d('baser_core', 'アップデートサポータープラグインにより、強制的に v5.0.20 にアップデートします。'));
+                    $controller->BcMessage->setInfo(__d('baser_core', 'アップデートサポータープラグインにより、強制的に v5.0系の最新版にアップデートします。'));
                 } else {
                 	$controller->Security->setConfig('unlockedActions', ['update']);
-                	$controller->setRequest($request->withData('targetVersion', '5.0.20'));
+                	$controller->setRequest($request->withData('targetVersion', '5.0.x'));
                 }
             }
         }
