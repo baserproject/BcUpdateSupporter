@@ -19,7 +19,7 @@ use Cake\Routing\RouteBuilder;
 /**
  * Plugin for BcUpdateSupporter
  */
-class BcUpdateSupporterPlugin extends BcPlugin
+class Plugin extends BcPlugin
 {
 
     /**
