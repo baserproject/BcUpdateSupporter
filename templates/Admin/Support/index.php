@@ -12,7 +12,7 @@
  * @var \BaserCore\View\BcAdminAppView $this
  * @var array $improvements
  */
-$this->BcAdmin->setTitle('アップデートサポーター');
+$this->BcAdmin->setTitle(__d('baser_core', 'アップデート時の問題'));
 ?>
 
 

@@ -7,12 +7,17 @@
  * @link          https://basercms.net baserCMS Project
  * @license       https://basercms.net/license/index.html MIT License
  */
+
 namespace BcUpdateSupporter\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcFolder;
+use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
+use Cake\Core\Plugin as CakePlugin;
 use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class SupportService
@@ -33,7 +38,7 @@ class SupportService implements SupportServiceInterface
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath('BcUpdateSupporter') . 'config' . DS . 'improvements';
 
-        if(BcUtil::is51()) {
+        if (BcUtil::is51()) {
             $folder = new BcFolder($path);
         } else {
             $folder = new Folder($path);
@@ -48,9 +53,9 @@ class SupportService implements SupportServiceInterface
         }
         asort($improvementVerPoints);
         foreach($improvementVerPoints as $key => $improvementVerPoint) {
-            if(preg_match('/^smaller-/', $key)) {
+            if (preg_match('/^smaller-/', $key)) {
                 if (!($currentVerPoint < $improvementVerPoint)) continue;
-            } elseif(preg_match('/^bigger-/', $key)) {
+            } elseif (preg_match('/^bigger-/', $key)) {
                 if (!($currentVerPoint > $improvementVerPoint)) continue;
             } else {
                 if (!($currentVerPoint === $improvementVerPoint)) continue;
@@ -80,10 +85,38 @@ class SupportService implements SupportServiceInterface
     public function execute(string $targetVersion): void
     {
         $path = BcUtil::getPluginPath('BcUpdateSupporter') . 'config' . DS . 'improvements' . DS . $targetVersion . DS . 'improvement.php';
-        if(!file_exists($path)) {
+        if (!file_exists($path)) {
             throw new BcException(__d('baser_core', '改善ファイルが見つかりませんでした。'));
         }
         include $path;
+    }
+
+    /**
+     * スクリプトを実行する
+     * @param string $version
+     * @return void
+     */
+    public function script(string $version)
+    {
+        $corePlugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        foreach($corePlugins as $corePlugin) {
+            $plugin = CakePlugin::getCollection()->create($corePlugin);
+            $plugin->execScript($version);
+        }
+    }
+
+    /**
+     * DBのバージョン番号を更新する
+     * @param string $version
+     * @return void
+     */
+    public function updateDbVersion(string $version)
+    {
+        $corePlugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        foreach($corePlugins as $corePlugin) {
+            $pluginsTable->update($corePlugin, $version);
+        }
     }
 
 }

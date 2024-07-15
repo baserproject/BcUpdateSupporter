@@ -37,9 +37,10 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
      */
     public function baserCorePluginsStartup(Event $event): void
     {
-        if(BcUtil::verpoint(BcUtil::getVersion()) < BcUtil::verpoint('5.0.20')) {
+        $currentVerpoint = BcUtil::verpoint(BcUtil::getVersion());
+        if($currentVerpoint < BcUtil::verpoint('5.0.20')) {
             $this->forBefore_5_0_20($event);
-        } elseif(BcUtil::verpoint(BcUtil::getVersion()) >= BcUtil::verpoint('5.0.20')) {
+        } elseif($currentVerpoint >= BcUtil::verpoint('5.0.20') && $currentVerpoint < BcUtil::verpoint('5.1.0')) {
 			$this->forAfter5_0_20($event);
 		}
     }
@@ -81,7 +82,7 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
             }
         }
     }
-	
+
 	/**
 	 * @param Event $event
 	 * @return void
@@ -104,14 +105,11 @@ class BcUpdateSupporterControllerEventListener extends BcControllerEventListener
 				}
 				Cache::delete('enable_plugins', '_bc_env_');
 			}
-		} elseif($this->isAction('Plugins.GetCoreUpdate')) {
-			if($request->is('post')) {
-				$controller->Security->setConfig('unlockedActions', ['get_core_update']);
-				$controller->setRequest($request->withData('targetVersion', '5.1.x'));
-			} else {
-				$controller->BcMessage->setInfo(__d('baser_core', "5.1系へのアップデートはプラグインが対応していないとシステム全体が動かなくなる可能性があります。\n安全にアップデートするため、アップデートサポーターが、アップデート実行時に全てのプラグインを無効化します。"));
-			}
-		}
+		} elseif($this->isAction('Plugins.Update')) {
+		    if(Cache::read('coreDownloaded', '_bc_update_')) {
+                $controller->BcMessage->setInfo(__d('baser_core', "5.1系へのアップデートはプラグインが対応していないとシステム全体が動かなくなる可能性があります。\n安全にアップデートするため、アップデートサポーターが、アップデート実行時に全てのプラグインを無効化します。"));
+            }
+        }
 	}
 
 }

@@ -41,4 +41,50 @@ class SupportController extends BcAdminAppController
         $this->set($service->getViewVarsForIndex(BcUtil::getVersion()));
     }
 
+    /**
+     * マイグレーション実行
+     *
+     * @param SupportAdminServiceInterface|SupportAdminService $service
+     * @return void
+     */
+    public function migration(SupportAdminServiceInterface $service)
+    {
+        if($this->getRequest()->is('post')) {
+            try {
+                $service->migration();
+                $this->BcMessage->setSuccess(__d('baser_core', 'マイグレーションの実行が完了しました。'));
+            } catch (\Exception $e) {
+                $this->BcMessage->setError($e->getMessage());
+            }
+            $this->redirect(['action' => 'migration']);
+        }
+    }
+
+    /**
+     * スクリプト実行
+     *
+     * @param SupportAdminServiceInterface|SupportAdminService $service
+     * @return void
+     */
+    public function script(SupportAdminServiceInterface $service)
+    {
+        if($this->getRequest()->is('post')) {
+            try {
+                if($this->getRequest()->getData('mode') === 'script') {
+                    $service->script($this->getRequest()->getData('target_version'));
+                    $this->BcMessage->setSuccess(__d('baser_core', 'スクリプトの実行が完了しました。'));
+                } elseif($this->getRequest()->getData('mode') === 'update_db_version') {
+                    $service->updateDbVersion($this->getRequest()->getData('target_version'));
+                    $this->BcMessage->setSuccess(__d('baser_core', 'DBのバージョン更新が完了しました。'));
+                } else {
+                    $this->BcMessage->setError(__d('baser_core', '不正なアクセスです。'));
+                }
+            } catch (\Exception $e) {
+                $this->BcMessage->setError($e->getMessage());
+            }
+            $this->redirect(['action' => 'script']);
+        }
+        $this->set($service->getViewVarsForScript());
+    }
+
 }
