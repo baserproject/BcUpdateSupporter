@@ -51,8 +51,15 @@ class SupportController extends BcAdminAppController
     {
         if($this->getRequest()->is('post')) {
             try {
-                $service->migration();
-                $this->BcMessage->setSuccess(__d('baser_core', 'マイグレーションの実行が完了しました。'));
+                if($this->getRequest()->getData('mode') === 'apply') {
+                    $service->migration();
+                    $this->BcMessage->setSuccess(__d('baser_core', 'マイグレーションの適用が完了しました。'));
+                } elseif($this->getRequest()->getData('mode') === 'mark') {
+                    $service->markMigrated();
+                    $this->BcMessage->setSuccess(__d('baser_core', 'マイグレーション済みとしてマーキングしました。'));
+                } else {
+                    $this->BcMessage->setError(__d('baser_core', '不正なアクセスです。'));
+                }
             } catch (\Exception $e) {
                 $this->BcMessage->setError($e->getMessage());
             }

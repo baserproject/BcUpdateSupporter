@@ -12,12 +12,12 @@ namespace BcUpdateSupporter\Service;
 
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcFolder;
-use BaserCore\Utility\BcUpdateLog;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
+use Migrations\Migrations;
 
 /**
  * Class SupportService
@@ -116,6 +116,36 @@ class SupportService implements SupportServiceInterface
         $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         foreach($corePlugins as $corePlugin) {
             $pluginsTable->update($corePlugin, $version);
+        }
+    }
+
+    /**
+     * マイグレーションを実行する
+     * @return void
+     */
+    public function migration()
+    {
+        $corePlugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        $pluginCollection = CakePlugin::getCollection();
+        foreach($corePlugins as $corePlugin) {
+            $plugin = $pluginCollection->create($corePlugin);
+            $plugin->migrate();
+        }
+    }
+
+    /**
+     * マイグレーション済みとしてマーキングする
+     * @return void
+     */
+    public function markMigrated()
+    {
+        $corePlugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        $migrations = new Migrations();
+
+        foreach($corePlugins as $corePlugin) {
+            // status を実行しないと、markMigrated が正常に動作しない
+            $migrations->status(['plugin' => $corePlugin]);
+            $migrations->markMigrated(null, ['plugin' => $corePlugin]);
         }
     }
 
