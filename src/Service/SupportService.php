@@ -11,11 +11,12 @@
 namespace BcUpdateSupporter\Service;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin as CakePlugin;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Migrations\Migrations;
 
@@ -24,6 +25,11 @@ use Migrations\Migrations;
  */
 class SupportService implements SupportServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * 改善情報を取得する
@@ -41,7 +47,7 @@ class SupportService implements SupportServiceInterface
         if (BcUtil::is51()) {
             $folder = new BcFolder($path);
         } else {
-            $folder = new Folder($path);
+            $folder = new \Cake\Filesystem\Folder($path);
         }
 
         $files = $folder->read(true, true);
@@ -121,11 +127,17 @@ class SupportService implements SupportServiceInterface
 
     /**
      * マイグレーションを実行する
+     * 一度インストールされたプラグインが対象
      * @return void
      */
     public function migration()
     {
-        $corePlugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        $pluginsTable->setDisplayField('name');
+        $corePlugins = array_merge(['BaserCore'], $pluginsTable->find('list')
+            ->all()
+            ->toArray()
+        );
         $pluginCollection = CakePlugin::getCollection();
         foreach($corePlugins as $corePlugin) {
             $plugin = $pluginCollection->create($corePlugin);
@@ -135,11 +147,17 @@ class SupportService implements SupportServiceInterface
 
     /**
      * マイグレーション済みとしてマーキングする
+     * 一度インストールされたプラグインが対象
      * @return void
      */
     public function markMigrated()
     {
-        $corePlugins = array_merge(['BaserCore'], Configure::read('BcApp.corePlugins'));
+        $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        $pluginsTable->setDisplayField('name');
+        $corePlugins = array_merge(['BaserCore'], $pluginsTable->find('list')
+            ->all()
+            ->toArray()
+        );
         $migrations = new Migrations();
 
         foreach($corePlugins as $corePlugin) {
