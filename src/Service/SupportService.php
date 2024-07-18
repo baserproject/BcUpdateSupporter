@@ -44,7 +44,7 @@ class SupportService implements SupportServiceInterface
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath('BcUpdateSupporter') . 'config' . DS . 'improvements';
 
-        if (BcUtil::is51()) {
+        if (method_exists(\BaserCore\Utility\BcUtil::class, 'is51') && BcUtil::is51()) {
             $folder = new BcFolder($path);
         } else {
             $folder = new \Cake\Filesystem\Folder($path);
