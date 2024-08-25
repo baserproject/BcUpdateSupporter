@@ -77,7 +77,7 @@ class SupportAdminService extends SupportService implements SupportAdminServiceI
     {
         // 有効化されていない可能性があるため CakePlugin::path() は利用しない
         $path = BcUtil::getPluginPath($name) . 'config' . DS . 'update';
-        if(BcUtil::is51()) {
+        if(method_exists(\BaserCore\Utility\BcUtil::class, 'is51') && BcUtil::is51()) {
             $folder = new \BaserCore\Utility\BcFolder($path);
         } else {
             $folder = new Folder($path);
