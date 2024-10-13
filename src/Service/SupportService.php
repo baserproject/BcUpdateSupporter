@@ -165,6 +165,8 @@ class SupportService implements SupportServiceInterface
         );
         $migrations = new Migrations();
 
+		$debug = Configure::read('debug');
+		Configure::write('debug', true);
         foreach($corePlugins as $corePlugin) {
         	try {
 				// status を実行しないと、markMigrated が正常に動作しない
@@ -172,6 +174,7 @@ class SupportService implements SupportServiceInterface
 				$migrations->markMigrated(null, ['plugin' => $corePlugin]);
 			} catch (MissingPluginException) {}
         }
+        Configure::write('debug', $debug);
     }
 
 }
