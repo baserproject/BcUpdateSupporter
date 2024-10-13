@@ -136,13 +136,16 @@ class SupportService implements SupportServiceInterface
         $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         $pluginsTable->setDisplayField('name');
         $corePlugins = array_merge(['BaserCore'], $pluginsTable->find('list')
+        	->where(['status' => true])
             ->all()
             ->toArray()
         );
         $pluginCollection = CakePlugin::getCollection();
         foreach($corePlugins as $corePlugin) {
-            $plugin = $pluginCollection->create($corePlugin);
-            $plugin->migrate();
+        	try {
+				$plugin = $pluginCollection->create($corePlugin);
+				$plugin->migrate();
+            } catch (MissingPluginException) {}
         }
     }
 
