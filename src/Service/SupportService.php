@@ -16,6 +16,7 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\ORM\TableRegistry;
 use Migrations\Migrations;
@@ -155,15 +156,18 @@ class SupportService implements SupportServiceInterface
         $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         $pluginsTable->setDisplayField('name');
         $corePlugins = array_merge(['BaserCore'], $pluginsTable->find('list')
+        	->where(['status' => true])
             ->all()
             ->toArray()
         );
         $migrations = new Migrations();
 
         foreach($corePlugins as $corePlugin) {
-            // status を実行しないと、markMigrated が正常に動作しない
-            $migrations->status(['plugin' => $corePlugin]);
-            $migrations->markMigrated(null, ['plugin' => $corePlugin]);
+        	try {
+				// status を実行しないと、markMigrated が正常に動作しない
+				$migrations->status(['plugin' => $corePlugin]);
+				$migrations->markMigrated(null, ['plugin' => $corePlugin]);
+			} catch (MissingPluginException) {}
         }
     }
 
