@@ -91,6 +91,8 @@ class SupportService implements SupportServiceInterface
      */
     public function execute(string $targetVersion): void
     {
+		$targetVersion = preg_replace('/^</', 'smaller-', $targetVersion);
+		$targetVersion = preg_replace('/^>/', 'bigger-', $targetVersion);
         $path = BcUtil::getPluginPath('BcUpdateSupporter') . 'config' . DS . 'improvements' . DS . $targetVersion . DS . 'improvement.php';
         if (!file_exists($path)) {
             throw new BcException(__d('baser_core', '改善ファイルが見つかりませんでした。'));

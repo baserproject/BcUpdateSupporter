@@ -9,7 +9,7 @@
  */
 
 /**
- * 5.1.0 improvement
+ * smaller 5.2.3 improvement
  */
 $targetPath1 = ROOT . DS . 'composer.json';
 $srcPath1 = __DIR__ . DS . 'composer.json';

@@ -9,7 +9,7 @@
  */
 
 /**
- * 5.2.3 improvement config
+ * smaller 5.2.3 improvement config
  */
 $composerPath = ROOT . DS . 'composer.json';
 if(is_writable($composerPath)) {
@@ -18,13 +18,13 @@ if(is_writable($composerPath)) {
     $isComposerWritable = false;
 }
 $content = file_get_contents($composerPath);
-if(preg_match('/"php-jwt\/php-jwt":\s*"\^7\./', $content)) {
+if(preg_match('/"firebase\/php-jwt":\s*"7\./', $content)) {
     $applied = true;
 } else {
     $applied = false;
 }
 return [
-    'title' => 'baserCMS 5.2.3へのアップデートにて php-jwt7系が必要な問題',
+    'title' => 'baserCMS 5.2.3 へのアップデートにて php-jwt7系が必要な問題',
     'detail' => 'baserCMS 5.2.3 へアップデート可能な composer.json を設置します。',
     'hasExecute' => true,
     'executeEnabled' => $isComposerWritable,
